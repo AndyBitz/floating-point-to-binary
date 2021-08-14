@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, LabelHTMLAttributes, ReactNode } from 'react';
+import { InputHTMLAttributes, LabelHTMLAttributes } from 'react';
 import cn from 'classnames';
 import styles from './inputs.module.css';
 
@@ -79,4 +79,3 @@ export function BinaryInput({
 		</div>
 	);
 }
-
