@@ -1,0 +1,75 @@
+.label {
+	display: block;
+	margin-bottom: var(--gap);
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.container {
+	width: 100%;
+}
+
+.container input {
+	font-size: 24px;
+	font-family: monospace;
+}
+
+.decimalInput {
+	width: 100%;
+	text-align: center;
+	border: 1px solid grey;
+	padding: var(--gap);
+}
+
+
+.binaryInputs {
+	width: 100%;
+	border: 1px solid grey;
+	padding: var(--gap);
+	display: grid;
+	gap: var(--gap);
+	grid-template-columns: [sign] 1fr [exponent] 11fr [mantissa] 52fr;
+	overflow: auto;
+}
+
+.binaryInputs>div {
+	font-size: 24px;
+	display: inline-block;
+	font-family: monospace;
+	text-align: center;
+}
+.binaryInputs>div>input {
+	display: inline-block;
+	width: 100%;
+	min-width: 0;
+	overflow: visible;
+	font-size: inherit;
+	border: none;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+	line-height: inherit;
+}
+.binaryInputs>div>input:focus {
+	outline: none;
+	background-color: lightgrey;
+}
+
+.inputSigned {
+	grid-column: sign;
+}
+
+.inputExponent {
+	grid-column: exponent;
+}
+
+.inputMantissa {
+	grid-column: mantissa;
+}
+
+.binaryDescription {
+	border: none;
+}
+.binaryDescription>div {
+	font-size: 16px;
+}
