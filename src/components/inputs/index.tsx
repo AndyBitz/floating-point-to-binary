@@ -38,6 +38,7 @@ export function BinaryInput({
 			<div className={styles.binaryInputs}>
 				<div className={styles.inputSigned}>
 					<input
+						readOnly
 						type="text"
 						minLength={1}
 						maxLength={1}
@@ -46,6 +47,7 @@ export function BinaryInput({
 				</div>
 				<div className={styles.inputExponent}>
 					<input
+						readOnly
 						type="text"
 						minLength={11}
 						maxLength={11}
@@ -54,6 +56,7 @@ export function BinaryInput({
 				</div>
 				<div className={styles.inputMantissa}>
 					<input
+						readOnly
 						type="text"
 						minLength={52}
 						maxLength={52}
