@@ -4,6 +4,10 @@
 	--gap: 8px;
 	--gap-double: calc(2 * var(--gap));
 	--gap-quadruple: calc(4 * var(--gap));
+
+	--bgSign: aquamarine;
+	--bgExponent: hotpink;
+	--bgMantissa: coral;
 }
 
 html, body {

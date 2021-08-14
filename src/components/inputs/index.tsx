@@ -62,14 +62,19 @@ export function BinaryInput({
 				</div>
 			</div>
 			<div className={cn(styles.binaryInputs, styles.binaryDescription)}>
-				<div>{signed === '1' ? '-' : '+'}</div>
-				<div>{parseInt(exponent, 2)}</div>
-				<div>{parseInt(mantissa, 2)}</div>
+				<div style={{ backgroundColor: 'var(--bgSign)' }}>{signed === '1' ? '-' : '+'}</div>
+				<div style={{ backgroundColor: 'var(--bgExponent)' }}>{parseInt(exponent, 2)}</div>
+				<div style={{ backgroundColor: 'var(--bgMantissa)' }}>{parseInt(mantissa, 2)}</div>
 			</div>
 			<div className={cn(styles.binaryInputs, styles.binaryDescription)}>
 				<div></div>
 				<div>Exponent</div>
 				<div>Mantissa</div>
+			</div>
+			<div className={cn(styles.binaryInputs, styles.binaryDescription)}>
+				<div></div>
+				<div>11 bits</div>
+				<div>52 bits</div>
 			</div>
 		</div>
 	);

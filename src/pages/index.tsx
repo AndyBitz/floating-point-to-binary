@@ -69,8 +69,15 @@ export default function Page() {
 
 			<Container>
 				<p style={{ textAlign: 'center', fontSize: '20px' }}>
-					{binary.signed === '1' ? '-' : ''}
-					{parseInt(binary.mantissa, 2)} &times; 10<sup>{parseInt(binary.exponent, 2)}</sup>
+					<span style={{ backgroundColor: 'var(--bgSign)' }}>
+						{binary.signed === '1' ? '-' : '+'}
+					</span>
+					<span style={{ backgroundColor: 'var(--bgMantissa)' }}>
+						{parseInt(binary.mantissa, 2)}
+					</span>
+					&nbsp;&times;&nbsp;
+					10
+					<sup>-<span style={{ backgroundColor: 'var(--bgExponent)' }}>{parseInt(binary.exponent, 2)}</span></sup>
 				</p>
 			</Container>
 		</Layout>
