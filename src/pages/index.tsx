@@ -2,6 +2,7 @@ import { BinaryInput } from '../components/inputs';
 import { ChangeEvent, useCallback, useState } from 'react';
 import { Container } from '../components/container';
 import { DecimalInput } from '../components/inputs';
+import { Footer } from '../components/footer';
 import { Header } from '../components/header';
 import { Label } from '../components/inputs';
 import { Layout } from '../components/layout';
@@ -80,6 +81,8 @@ export default function Page() {
 					<sup>-<span style={{ backgroundColor: 'var(--bgExponent)' }}>{parseInt(binary.exponent, 2)}</span></sup>
 				</p>
 			</Container>
+
+			<Footer />
 		</Layout>
 	);
 }

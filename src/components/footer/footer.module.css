@@ -1,0 +1,4 @@
+.footer {
+	margin: var(--gap-quadruple);
+	margin-top: calc(3 * var(--gap-quadruple));
+}
