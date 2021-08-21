@@ -1,31 +1,51 @@
 import { BinaryInput } from '../components/inputs';
-import { ChangeEvent, useCallback, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { Container } from '../components/container';
 import { DecimalInput } from '../components/inputs';
 import { Footer } from '../components/footer';
 import { Header } from '../components/header';
 import { Label } from '../components/inputs';
 import { Layout } from '../components/layout';
+import { useRouter } from 'next/dist/client/router';
+
+const BIAS = 1023; // 1023 is the bias for 64 bit
 
 function decimalToBinary(input: number) {
-	const stringed = input.toString(10);
-	const dotIndex = stringed.indexOf('.');
-	const decimalPlaces = dotIndex === -1 ? 0 : stringed.length - (dotIndex + 1); // Becomes the exponent
-
-	const negative = stringed.startsWith('-'); // Cannot compare input, because -0 === +0
-	const exponent = Math.min(1024, decimalPlaces); // Exponent can't be higher than 1024
-	const mantissa = parseInt(stringed.replace('.', '').replace('-', ''));
+	const negative = input.toString(10).startsWith('-');
+	const [first, second = ''] = input.toString(2).split('.');
+	const exponent = (first.length - 1) + BIAS;
+	const mantissa = `${first.slice(1)}${second}`;
 
 	return {
 		signed: negative ? '1' : '0',
 		exponent: exponent.toString(2).padStart(11, '0'),
-		mantissa: mantissa.toString(2).padStart(52, '0')
+		mantissa: mantissa.padEnd(52, '0'),
 	};
 }
 
 export default function Page() {
+	const router = useRouter();
+
 	const [input, setInput] = useState<number>(Math.PI);
 	const [binary, setBinary] = useState(decimalToBinary(input));
+
+	const decimalInput = router.query.decimal;
+	useEffect(() => {
+		if (typeof decimalInput !== 'string') {
+			return;
+		}
+
+		const no = Number(decimalInput);
+		if (Number.isNaN(no)) {
+			return;
+		}
+
+		setInput(no);
+		setBinary(decimalToBinary(no));
+	}, [
+		decimalInput,
+		setInput
+	]);
 
 	const onDecimalInput = useCallback((event: ChangeEvent<HTMLInputElement>) => {
 		event.preventDefault();
@@ -39,13 +59,6 @@ export default function Page() {
 		input,
 		setInput,
 		setBinary
-	]);
-
-	const onBinaryInput = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-		event.preventDefault();
-	}, [
-		input,
-		setInput
 	]);
 
 	return (
@@ -62,27 +75,62 @@ export default function Page() {
 
 			<Container>
 				<Label>Binary</Label>
-				<BinaryInput
-					{...binary}
-					onChange={onBinaryInput}
-				/>
+				<BinaryInput {...binary} />
 			</Container>
 
-			<Container>
-				<p style={{ textAlign: 'center', fontSize: '20px' }}>
-					<span style={{ backgroundColor: 'var(--bgSign)' }}>
-						{binary.signed === '1' ? '-' : '+'}
-					</span>
-					<span style={{ backgroundColor: 'var(--bgMantissa)' }}>
-						{parseInt(binary.mantissa, 2)}
-					</span>
-					&nbsp;&times;&nbsp;
-					10
-					<sup>-<span style={{ backgroundColor: 'var(--bgExponent)' }}>{parseInt(binary.exponent, 2)}</span></sup>
-				</p>
-			</Container>
+			<Calculation {...binary} />
 
 			<Footer />
 		</Layout>
+	);
+}
+
+function Calculation({
+	signed,
+	exponent,
+	mantissa,
+}: {
+	signed: string;
+	exponent: string;
+	mantissa: string;
+}) {
+	const mantissaCalc = useMemo(() => {
+		return mantissa.split('').map((value, index) => {
+			if (value === '0') {
+				return null;
+			}
+
+			return (
+				<span key={index}>
+					2<sup>-{index + 1}</sup>
+				</span>
+			);
+		}).filter(Boolean);
+	}, [mantissa]);
+
+	return (
+		<Container>
+			<p style={{ textAlign: 'center', fontSize: '20px', fontFamily: 'monospace' }}>
+				(-1)
+				<sup>
+					<span style={{ backgroundColor: 'var(--bgSign)' }}>
+						{signed}
+					</span>
+				</sup>
+				&nbsp;&times;&nbsp;
+				<span>
+					2
+					<sup>
+						<span style={{ backgroundColor: 'var(--bgExponent)' }}>{parseInt(exponent, 2)}</span>
+						&minus;
+						{BIAS}
+					</sup>
+				</span>
+				&nbsp;&times;&nbsp;
+				<span>
+					(1{mantissaCalc.length ? <>&nbsp;+&nbsp;</> : null}{mantissaCalc.length ? <span style={{ backgroundColor: 'var(--bgMantissa)' }}>{mantissaCalc.map((item, index) => <>{index !== 0 ? <>&nbsp;+&nbsp;</> : null}{item}</>)}</span> : null})
+				</span>
+			</p>
+		</Container>
 	);
 }

@@ -26,12 +26,10 @@ export function BinaryInput({
 	signed,
 	exponent,
 	mantissa,
-	onChange
 }: {
 	signed: string;
 	exponent: string;
 	mantissa: string;
-	onChange: unknown;
 }) {
 	return (
 		<div className={styles.container}>
@@ -67,7 +65,7 @@ export function BinaryInput({
 			<div className={cn(styles.binaryInputs, styles.binaryDescription)}>
 				<div style={{ backgroundColor: 'var(--bgSign)' }}>{signed === '1' ? '-' : '+'}</div>
 				<div style={{ backgroundColor: 'var(--bgExponent)' }}>{parseInt(exponent, 2)}</div>
-				<div style={{ backgroundColor: 'var(--bgMantissa)' }}>{parseInt(mantissa, 2)}</div>
+				<div style={{ backgroundColor: 'var(--bgMantissa)' }}></div>
 			</div>
 			<div className={cn(styles.binaryInputs, styles.binaryDescription)}>
 				<div></div>
