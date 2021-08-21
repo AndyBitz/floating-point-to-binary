@@ -12,7 +12,7 @@ const BIAS = 1023; // 1023 is the bias for 64 bit
 
 function decimalToBinary(input: number) {
 	const negative = input.toString(10).startsWith('-');
-	const [first, second = ''] = input.toString(2).split('.');
+	const [first, second = ''] = Math.abs(input).toString(2).split('.');
 	const exponent = (first.length - 1) + BIAS;
 	const mantissa = `${first.slice(1)}${second}`;
 
