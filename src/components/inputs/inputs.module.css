@@ -38,7 +38,7 @@
 	font-family: monospace;
 	text-align: center;
 }
-.binaryInputs>div>input {
+.binaryInputs>div>span {
 	display: inline-block;
 	width: 100%;
 	min-width: 0;
@@ -50,8 +50,15 @@
 	text-align: center;
 	line-height: inherit;
 }
-.binaryInputs>div>input:focus {
+.binaryInputs>div>span:focus {
 	outline: none;
+	background-color: lightgrey;
+}
+
+.binaryInputs>div>span>span {
+	cursor: pointer;
+}
+.binaryInputs>div>span>span:hover {
 	background-color: lightgrey;
 }
 

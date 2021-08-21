@@ -23,6 +23,30 @@ function decimalToBinary(input: number) {
 	};
 }
 
+function binaryToDecimal({
+	signed,
+	exponent,
+	mantissa,
+}: {
+	signed: string;
+	exponent: string;
+	mantissa: string;
+}) {
+	return (
+		Math.pow(-1, parseInt(signed, 2))
+		*
+		Math.pow(2, parseInt(exponent, 2) - BIAS)
+		*
+		(1 + mantissa.split('').reduce((total, next, index) => {
+			if (next === '1') {
+				return total + Math.pow(2, -(index + 1));
+			}
+
+			return total;
+		}, 0))
+	);
+}
+
 export default function Page() {
 	const router = useRouter();
 
@@ -61,6 +85,31 @@ export default function Page() {
 		setBinary
 	]);
 
+	const onBinaryInput = useCallback((binaryInput: {
+		signed: string;
+		exponent: string;
+		mantissa: string;
+	}) => {
+		if (
+			binaryInput.exponent === '1'.repeat(11) &&
+			/1/gm.test(binaryInput.mantissa)
+		) {
+			setInput(NaN);
+			setBinary({
+				signed: '0',
+				exponent: '1'.repeat(11),
+				mantissa: '1' + '0'.repeat(51)
+			});
+			return;
+		}
+
+		setInput(binaryToDecimal(binaryInput));
+		setBinary(binaryInput);
+	}, [
+		setInput,
+		setBinary
+	]);
+
 	return (
 		<Layout>
 			<Header />
@@ -68,14 +117,18 @@ export default function Page() {
 			<Container>
 				<Label>Decimal</Label>
 				<DecimalInput
-					value={input}
+					value={`${input}`}
+					type={input === Infinity || input === -Infinity || Number.isNaN(input) ? 'text' : 'number'}
 					onChange={onDecimalInput}
 				/>
 			</Container>
 
 			<Container>
 				<Label>Binary</Label>
-				<BinaryInput {...binary} />
+				<BinaryInput
+					{...binary}
+					onChange={onBinaryInput}
+				/>
 			</Container>
 
 			<Calculation {...binary} />
@@ -128,7 +181,7 @@ function Calculation({
 				</span>
 				&nbsp;&times;&nbsp;
 				<span>
-					(1{mantissaCalc.length ? <>&nbsp;+&nbsp;</> : null}{mantissaCalc.length ? <span style={{ backgroundColor: 'var(--bgMantissa)' }}>{mantissaCalc.map((item, index) => <>{index !== 0 ? <>&nbsp;+&nbsp;</> : null}{item}</>)}</span> : null})
+					(1{mantissaCalc.length ? <>&nbsp;+&nbsp;</> : null}{mantissaCalc.length ? <span style={{ backgroundColor: 'var(--bgMantissa)' }}>{mantissaCalc.map((item, index) => <span key={index}>{index !== 0 ? <>&nbsp;+&nbsp;</> : null}{item}</span>)}</span> : null})
 				</span>
 			</p>
 		</Container>
